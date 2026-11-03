@@ -204,7 +204,7 @@ th,td{padding:13px 16px;border-bottom:1px solid #f0f1f4;font-size:.9em}tr:hover 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const I=(n,c="")=>`<svg class="i ${c}"><use href="#${n}"/></svg>`;
 const firebaseConfig={apiKey:"AIzaSyCjPu3W9L0rSXXf3aVCzmx9fJ9n9HP9K3s",authDomain:"cyintel-cb4c9.firebaseapp.com",databaseURL:"https://cyintel-cb4c9-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"cyintel-cb4c9",storageBucket:"cyintel-cb4c9.firebasestorage.app",messagingSenderId:"1067686818980",appId:"1:1067686818980:web:fc491062474f1010b12231",measurementId:"G-W6E553YQGN"};
-const API_BASE="https://YOUR-SERVICE.onrender.com"; // your Render backend URL
+const API_BASE="https://paypal-ai-backend.onrender.com/"; // your Render backend URL
 let auth=null,user=null,mode="login",step=1;
 try{firebase.initializeApp(firebaseConfig);auth=firebase.auth()}catch(e){console.warn(e)}
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
