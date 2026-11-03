@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Razorpay Dashboard · PayPal Payouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
+<style>
+:root{--blue:#2b5cff;--blue2:#1d4ae0;--ink:#0d1b3e;--mut:#6b7280;--line:#e5e7eb;--ok:#0f9d58;--warn:#d97706;--r:12px}
+*{box-sizing:border-box;margin:0;font-family:Inter,system-ui,sans-serif}
+html,body{height:100%;background:#fff;color:var(--ink);font-size:clamp(13px,.5vw + 10px,15px)}
+button{cursor:pointer;border:0;font-weight:500;transition:.18s}input{font-size:1em}
+.hide{display:none!important}svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* login */
+#auth{min-height:100%;display:grid;grid-template-columns:1fr 520px;background:#fff}
+.hl{position:relative;overflow:hidden;padding:48px;display:flex;flex-direction:column;justify-content:space-between;
+background:repeating-linear-gradient(105deg,#ffffffcc 0 40px,#c9f3ff66 40px 70px,#ffffff00 70px 120px,#b6e6ff55 120px 150px),linear-gradient(160deg,#f4fffe,#bdf0ff 55%,#e4f7ff)}
+.rz{display:flex;align-items:center;gap:6px;font-style:italic;font-weight:700;font-size:1.5em;color:#0b1f4d;letter-spacing:-.5px}
+.hl h2{font-size:clamp(1.5em,2.4vw,2.2em);color:#0b7c55;font-weight:600;line-height:1.25;letter-spacing:-.5px;max-width:640px}
+.fe{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px;color:#0b7c55;font-weight:500}.fe span{display:flex;gap:8px;align-items:center}
+.hr{position:relative;padding:70px clamp(24px,5vw,72px) 30px;display:flex;flex-direction:column;box-shadow:-10px 0 30px #0001;overflow:hidden}
+.ribbon{position:absolute;right:-62px;top:28px;width:230px;transform:rotate(35deg);text-align:center;background:linear-gradient(90deg,#e8f1ff,#fff);color:#2b5cff;font-weight:600;font-size:.82em;padding:6px 0;box-shadow:0 2px 6px #0001}
+.mk{width:48px;height:48px;border-radius:10px;background:#2b5cff;display:grid;place-items:center;margin-bottom:22px}
+.hr .wel{color:#6b7280;font-size:.85em;margin-bottom:10px}.hr .wel b{color:#1f2937}
+.hr h1{font-size:clamp(1.5em,2.2vw,2em);line-height:1.2;font-weight:600;letter-spacing:-.6px;margin-bottom:22px}
+.in{width:100%;padding:13px 12px;border:1px solid #d1d5db;border-radius:8px;outline:0;background:#fff;transition:.15s;margin-bottom:12px}
+.in:focus{border:1.5px solid var(--blue);box-shadow:0 0 0 3px #2b5cff1f}
+.btn{background:linear-gradient(90deg,#3b5bff,#1a56f0);color:#fff;padding:11px 18px;border-radius:7px;width:100%;box-shadow:0 2px 6px #2b5cff44}.btn:hover{filter:brightness(1.08);box-shadow:0 6px 16px #2b5cff55}
+.btn.sm{width:auto;padding:9px 16px;font-size:.9em}
+.gb{width:100%;display:flex;align-items:center;gap:12px;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:11px;color:#1f2937}.gb:hover{background:#f8fafc;border-color:#cbd5e1}
+.or{display:flex;align-items:center;gap:12px;color:#6b7280;font-size:.8em;margin:20px 0}.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.err{color:#dc2626;font-size:.82em;min-height:1.2em;margin:-2px 0 8px}
+.lnk{color:var(--blue);cursor:pointer;font-size:.85em}
+.fine{margin-top:auto;padding-top:30px;color:#6b7280;font-size:.78em;line-height:1.7}.fine a{color:var(--blue)}
+.pt{background:#f5f5f6;border-radius:8px;padding:14px 16px;margin-top:14px;font-size:.88em}.pt a{display:flex;gap:6px;align-items:center;color:var(--blue);font-weight:500;margin-top:6px;cursor:pointer}
+/* onboarding */
+#onb{height:100%;display:grid;grid-template-columns:340px 1fr;background:#fbfcfe;padding:0 8px 8px 0}
+.ol{padding:20px 18px 14px;display:flex;flex-direction:column;position:relative}
+.ol .bar{position:absolute;left:8px;top:90px;bottom:30px;width:8px;border-radius:9px;background:linear-gradient(#18c58a 0 36%,#e5e7eb 36%)}
+.oh{display:flex;align-items:center;justify-content:space-between;font-weight:600;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:34px}.oh span{display:flex;gap:14px;color:#111}
+.ol h3{font-weight:400;font-size:1.5em;color:#6b7280;padding-left:18px;line-height:1.35}.ol h3 b{color:#111;font-weight:400;display:block}
+.stp{display:flex;align-items:center;gap:12px;padding:12px;border-radius:7px;margin:8px 0 0 18px;font-size:.92em;color:#374151}.stp.on{background:#eef0f4;font-weight:500}.stp em{font-style:normal;color:#6b7280;width:18px}.stp .c{margin-left:auto}
+.ob{margin-top:auto;border-top:1px solid var(--line);padding:18px 12px 0 18px}
+.ob div{display:flex;align-items:center;gap:12px;padding:10px 0;color:#1f2937;cursor:pointer}
+.tg{margin-left:auto;width:36px;height:20px;border-radius:99px;background:#e5e7eb;position:relative;transition:.25s}.tg:after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0004;transition:.25s}.tg.on{background:var(--ok)}.tg.on:after{left:18px}
+.oc{background:#fff;border-radius:16px;border:1px solid var(--line);padding:clamp(24px,5vw,60px) clamp(20px,7vw,140px);position:relative;overflow:auto;display:flex;flex-direction:column;background-image:radial-gradient(circle at 100% 100%,#c9d6ff 0,#fff 35%)}
+.oc small{display:flex;gap:6px;align-items:center;color:#4b5563;font-size:.8em;margin-bottom:26px}
+.oc h1{font-size:clamp(1.8em,3vw,2.5em);font-weight:600;letter-spacing:-1px;line-height:1.15}.oc h1 span{color:#5b6672;display:block}
+.fd{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:14px 4px 10px;max-width:490px;color:#6b7280}
+.fd:first-of-type{margin-top:46px}.fd small{margin:0 0 3px;display:block;font-size:.76em;color:#6b7280}.fd b{font-weight:500;color:#111}.fd .sk{color:#9ca3af;font-weight:400}.fd svg{cursor:pointer}
+.oc .btn{max-width:490px;margin-top:auto;padding:12px}.oc .sp{height:40px}
+/* splash */
+#splash{position:fixed;inset:0;z-index:100;background:#fff;display:grid;place-items:center;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cpath d='M40 60l60-35 60 35v70l-60 35-60-35z' fill='none' stroke='%23dfe6fb' stroke-width='1.2'/%3E%3Cpath d='M100 25v70l60 35M100 95l-60 35' fill='none' stroke='%23e6ecfc'/%3E%3C/svg%3E")}
+.ring{width:40px;height:40px;border:3px solid #e1ecf9;border-top-color:#1e90ff;border-radius:50%;animation:r .8s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+/* dashboard */
+#app{height:100%;display:flex;flex-direction:column;background:#000}
+.top{height:54px;flex:none;display:flex;align-items:center;gap:6px;padding:0 16px;color:#fff;position:relative}
+.top .rz{color:#fff;margin-right:18px;font-size:1.3em}
+.top nav{display:flex;gap:2px;overflow:auto;scrollbar-width:none}
+.top nav a{display:flex;gap:7px;align-items:center;padding:8px 12px;border-radius:8px;color:#d1d5db;font-weight:500;white-space:nowrap;cursor:pointer;font-size:.92em}
+.top nav a:hover{background:#ffffff18;color:#fff}.top nav a.on{color:#fff;background:#ffffff14;box-shadow:inset 0 -2px #3395ff}
+.sp1{flex:1}.search{display:flex;gap:8px;align-items:center;background:#1a1a1a;border:1px solid #333;color:#9ca3af;border-radius:8px;padding:9px 14px;width:min(330px,26vw);font-size:.85em}
+.ib{width:36px;height:36px;border-radius:8px;background:#1a1a1a;border:1px solid #333;color:#fff;display:grid;place-items:center}.ib:hover{background:#2a2a2a}.burger{display:none}
+.notch{position:absolute;left:50%;transform:translateX(-50%);background:#000;height:32px;padding:0 20px;border-radius:0 0 18px 18px;display:flex;align-items:center;gap:10px;color:#cbd5e1;letter-spacing:.25em;font-size:.72em;font-weight:600;z-index:3;top:54px;cursor:pointer}
+.notch:before,.notch:after{content:"";position:absolute;top:0;width:18px;height:18px;background:radial-gradient(circle at 0 100%,transparent 17px,#000 18px)}.notch:before{left:-18px;transform:scaleX(-1)}.notch:after{right:-18px}
+.body{flex:1;display:flex;min-height:0;background:#fff;border-radius:16px 16px 0 0;margin:0 8px;overflow:hidden}
+.side{width:230px;flex:none;border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;overflow:auto;transition:.25s;background:#fff}
+.side a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:9px;color:#1f2937;cursor:pointer;font-size:.93em}.side a:hover{background:#f3f4f6}.side a.on{background:#eeeff2;font-weight:600}
+.side small{font-size:.68em;letter-spacing:.06em;color:#6b7280;padding:16px 12px 6px;font-weight:500}.side .push{flex:1}
+.tag{font-size:.66em;background:#e3f6ec;color:var(--ok);padding:2px 7px;border-radius:5px;font-weight:600}.tag.new{background:#e8edff;color:var(--blue)}
+.main{flex:1;overflow:auto;padding:clamp(16px,3vw,40px);background:#fff}
+.wrap{max-width:1000px;margin:36px auto 80px}
+h1.t{text-align:center;font-size:clamp(1.5em,3vw,2.2em);font-weight:600;letter-spacing:-.5px}
+.on-card{background:#f4f7ff;border-radius:var(--r);padding:34px 20px;text-align:center;margin:28px 0}.on-card h3{margin:12px 0 6px}.on-card p{font-size:.85em;color:var(--mut);margin-bottom:16px}
+.ico{width:48px;height:48px;border-radius:12px;background:#10b981;display:inline-grid;place-items:center;color:#fff}.ico svg{width:24px;height:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.prod{border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:.2s;cursor:pointer;background:#fff}.prod:hover{transform:translateY(-4px);box-shadow:0 12px 28px #1e3a8a22;border-color:#c7d2fe}
+.prod .art{height:110px;border-radius:8px;background:#edf1ff;display:grid;place-items:center;color:var(--blue);margin-bottom:14px}.prod .art svg{width:46px;height:46px;stroke-width:1.3}
+.prod h4{margin:6px 0 4px}.prod p{font-size:.85em;color:var(--mut);line-height:1.5;margin-bottom:12px}.prod a{color:var(--blue);font-weight:500;font-size:.9em}
+.hero{background:linear-gradient(120deg,#0b1437,#2b5cff);color:#fff;border-radius:var(--r);padding:clamp(20px,3vw,34px);display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap}
+.hero h2{font-size:clamp(1.2em,2.2vw,1.7em);max-width:560px;line-height:1.25}.hero p{opacity:.9;margin:8px 0 16px;max-width:520px;font-size:.92em}.hero .big svg{width:84px;height:84px;stroke-width:1}
+.pill{display:inline-block;background:#ffffff26;padding:5px 12px;border-radius:99px;font-size:.75em;font-weight:500;margin-bottom:10px}
+.hero .btn{background:#fff;color:var(--ink);box-shadow:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}.stat{border:1px solid var(--line);border-radius:var(--r);padding:16px}.stat span{font-size:.78em;color:var(--mut)}.stat b{display:block;font-size:1.5em;margin-top:6px}
+.panel{border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:24px}.panel h3{margin-bottom:14px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 14px}label{display:block;font-size:.8em;font-weight:500;margin:4px 0 6px;color:#374151}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.82em;color:var(--mut);margin:0 0 20px}.flow b{display:flex;gap:6px;align-items:center;background:#f3f4f6;color:var(--ink);padding:7px 11px;border-radius:8px;font-weight:500}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:var(--r)}table{width:100%;border-collapse:collapse;min-width:640px}th{background:#f9fafb;text-align:left;font-size:.75em;color:var(--mut);letter-spacing:.04em;font-weight:500}
+th,td{padding:13px 16px;border-bottom:1px solid #f0f1f4;font-size:.9em}tr:hover td{background:#fafbff}
+.st{padding:3px 9px;border-radius:99px;font-size:.76em;font-weight:600}.st.w{background:#fff4e0;color:var(--warn)}.st.p{background:#e3f6ec;color:var(--ok)}
+.empty{padding:36px;text-align:center;color:var(--mut)}
+.help{position:fixed;right:20px;bottom:20px;background:#1f2937;color:#fff;padding:12px 18px;border-radius:99px;box-shadow:0 8px 24px #0004;z-index:20;font-size:.88em;display:flex;gap:8px;align-items:center}.help:hover{background:#111827;transform:translateY(-2px)}
+#toast{position:fixed;top:70px;right:20px;z-index:50;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.to{background:#0d1b3e;color:#fff;padding:14px 16px;border-radius:10px;box-shadow:0 10px 30px #0006;font-size:.88em;line-height:1.5;animation:in .3s;display:flex;gap:10px}.to b{display:block}.to svg{margin-top:2px;color:#60a5fa}
+@keyframes in{from{opacity:0;transform:translateX(30px)}}
+.menu{position:absolute;right:16px;top:50px;background:#fff;color:var(--ink);border-radius:10px;padding:8px;min-width:210px;box-shadow:0 12px 34px #0005;z-index:30}
+.menu div{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:7px;cursor:pointer;font-size:.9em}.menu div:hover{background:#f3f4f6}
+.sw{width:34px;height:18px;border-radius:99px;background:#0f9d58;position:relative;display:inline-block;flex:none}.sw:after{content:"";position:absolute;right:2px;top:2px;width:14px;height:14px;background:#fff;border-radius:50%}
+.sp2{display:inline-block;width:14px;height:14px;border:2px solid #fff6;border-top-color:#fff;border-radius:50%;animation:r .7s linear infinite;vertical-align:-2px;margin-right:6px}
+@media(max-width:900px){#auth{grid-template-columns:1fr}.hl{display:none}.hr{min-height:100vh}#onb{grid-template-columns:1fr;overflow:auto;padding:0}.ol .bar{display:none}.oc{border-radius:0}
+.search{display:none}.burger{display:grid}.top .rz{margin-right:6px}.side{position:fixed;left:0;top:54px;bottom:0;z-index:25;transform:translateX(-100%);box-shadow:8px 0 30px #0004}.side.open{transform:none}.body{margin:0 4px}.notch{display:none}.top nav a:nth-child(n+3){display:none}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="swap" viewBox="0 0 24 24"><path d="M4 8h14l-4-4M20 16H6l4 4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M3 12l5 5L18 7M10 17l1 1L21 8"/></symbol>
+<symbol id="doc" viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7zM15 3v4h4M10 12h6M10 16h6"/></symbol>
+<symbol id="link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></symbol>
+<symbol id="page" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></symbol>
+<symbol id="at" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-3.5 7"/></symbol>
+<symbol id="qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h3v3h-3zM20 14v6h-3"/></symbol>
+<symbol id="repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+<symbol id="wallet" viewBox="0 0 24 24"><path d="M3 7h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l3-3h11M16 14h3"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></symbol>
+<symbol id="flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-10V3M7 15h10"/></symbol>
+<symbol id="bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+<symbol id="act" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></symbol>
+<symbol id="head" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v5H5a1 1 0 0 1-1-1zM20 14h-3v5h2a1 1 0 0 0 1-1zM17 19a4 4 0 0 1-4 2"/></symbol>
+<symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/></symbol>
+<symbol id="dots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
+<symbol id="bld" viewBox="0 0 24 24"><path d="M4 21V4h10v17M14 9h6v12M8 8h2M8 12h2M8 16h2M3 21h18"/></symbol>
+<symbol id="id" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM13 10h5M13 14h5"/><circle cx="8" cy="11" r="2"/><path d="M5 17a3 3 0 0 1 6 0"/></symbol>
+<symbol id="trend" viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 8M21 11v6h-6"/></symbol>
+<symbol id="mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></symbol>
+<symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="pct" viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></symbol>
+<symbol id="cart" viewBox="0 0 24 24"><path d="M3 4h3l2 12h10l2-8H7"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></symbol>
+<symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></symbol>
+<symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+<symbol id="cc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+<symbol id="mk" viewBox="0 0 24 24"><path d="M9 3h4L7 21H3zM15 8h4l-6 13h-4z" fill="currentColor" stroke="none"/></symbol>
+</defs></svg>
+
+<section id="auth">
+ <div class="hl"><div class="rz"><svg class="i" style="color:#2b5cff;width:1.1em"><use href="#mk"/></svg>Razorpay</div>
+  <div><h2>Join 8 Million Businesses that Trust Razorpay to Supercharge their Business</h2>
+  <div class="fe"><span><svg class="i"><use href="#plus"/></svg>100+ Payment Methods</span><span><svg class="i"><use href="#plus"/></svg>Easy Integration</span><span><svg class="i"><use href="#plus"/></svg>Powerful Dashboard</span></div></div></div>
+ <div class="hr"><div class="ribbon">0%* Platform Fees</div>
+  <div class="mk"><svg class="i" style="color:#fff;width:26px;height:26px"><use href="#mk"/></svg></div>
+  <div class="wel">Welcome to <b>Razorpay</b></div>
+  <h1 id="aT">Get started with your email or phone number</h1>
+  <input class="in" id="aE" placeholder="Enter your email or phone number" autocomplete="email">
+  <input class="in hide" id="aP" type="password" placeholder="Enter your password" autocomplete="current-password">
+  <div class="err" id="aErr"></div>
+  <button class="btn" id="aGo">Continue</button>
+  <div class="hide" id="sw" style="margin-top:12px"><span class="lnk" id="aSw"></span></div>
+  <div class="or">or</div>
+  <button class="gb" id="aG"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.7 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.5 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.9-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.7-4-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
+  <div class="fine">By continuing you agree to our <a>privacy policy</a> &amp; <a>terms of use</a>.<br>*Limited period offer, <a>terms and conditions</a> apply.
+  <div class="pt">Helping Clients with Razorpay Solutions?<a>Become Razorpay Partner <svg class="i"><use href="#arr"/></svg></a></div>
+  <div style="margin-top:14px"><span class="lnk" id="aD">Explore with a demo account</span></div></div>
+ </div></section>
+
+<section id="onb" class="hide">
+ <aside class="ol"><div class="bar"></div>
+  <div class="oh"><b id="oN"></b><span><svg class="i"><use href="#head"/></svg><svg class="i" id="oM" style="cursor:pointer"><use href="#dots"/></svg></span></div>
+  <h3>Onboarding:<b>Razorpay Payments</b></h3>
+  <div class="stp on"><svg class="i" style="color:var(--ok)"><use href="#cc"/></svg>Basic details</div>
+  <div class="stp"><em>2.</em>Business details<svg class="i c"><use href="#chev"/></svg></div>
+  <div class="stp"><em>3.</em>KYC details</div>
+  <div class="ob"><div id="oT"><svg class="i"><use href="#flask"/></svg>Test Mode<span class="tg" id="oTg"></span></div><div onclick="toast('Test API Keys','Switch on Test Mode to generate keys.')"><svg class="i"><use href="#key"/></svg>Get Test API Keys</div></div></aside>
+ <main class="oc"><small><svg class="i" style="color:#2b5cff"><use href="#mk"/></svg>Razorpay Payments</small>
+  <h1>Review/ Edit<span>Basic details</span></h1>
+  <div class="fd"><div><small>Add your Name</small><b id="oN2"></b></div><svg class="i"><use href="#pen"/></svg></div>
+  <div class="fd"><div><small>Accept Payments on</small><b>Website, Android App</b></div><svg class="i"><use href="#pen"/></svg></div>
+  <div class="fd"><div><small>Add your Website and App links - Android, Website</small><b class="sk">Skipped</b></div><svg class="i"><use href="#pen"/></svg></div>
+  <div class="sp"></div><button class="btn" onclick="toast('KYC required','Business &amp; KYC details unlock live payments. Turn on Test Mode to explore now.')">Continue</button></main>
+</section>
+
+<div id="splash" class="hide"><div class="ring"></div></div>
+
+<section id="app" class="hide">
+ <header class="top"><button class="ib burger" id="bg"><svg class="i"><use href="#menu"/></svg></button><div class="rz"><svg class="i" style="color:#3395ff;width:1.1em"><use href="#mk"/></svg>Razorpay</div>
+  <nav><a data-v="home"><svg class="i"><use href="#home"/></svg>Razorpay Home</a><a class="on" data-v="home"><svg class="i"><use href="#page"/></svg>Payments</a><a data-v="pp"><svg class="i"><use href="#bld"/></svg>Company Registration</a><a data-v="pp"><svg class="i"><use href="#wallet"/></svg>Banking+</a><a data-v="pp">More</a></nav>
+  <div class="sp1"></div><div class="search"><svg class="i"><use href="#search"/></svg>Search payment products, settings, and more</div>
+  <button class="ib" onclick="toast('Activity','No new activity in Test Mode')"><svg class="i"><use href="#act"/></svg></button><button class="ib" onclick="toast('Updates','PayPal Payouts is now available.')"><svg class="i"><use href="#bell"/></svg></button>
+  <button class="ib" id="um"><svg class="i"><use href="#user"/></svg></button>
+  <div class="menu hide" id="menu"><div style="color:var(--mut);cursor:default" id="mEm"></div><div id="lo"><svg class="i"><use href="#out"/></svg>Log out</div></div>
+  <div class="notch" onclick="leaveTest()"><span class="sw"></span>TEST</div></header>
+ <div class="body">
+  <aside class="side" id="side">
+   <a data-v="home" class="on"><svg class="i"><use href="#home"/></svg>Home</a><a data-v="tx"><svg class="i"><use href="#swap"/></svg>Transactions</a><a data-v="pp"><svg class="i"><use href="#check"/></svg>Settlements</a><a data-v="pp"><svg class="i"><use href="#doc"/></svg>Reports</a>
+   <small>PAYMENT PRODUCTS</small>
+   <a data-v="payouts"><svg class="i"><use href="#wallet"/></svg>PayPal Payouts<span class="tag new">NEW</span></a>
+   <a data-v="pp"><svg class="i"><use href="#link"/></svg>Payment Links<span class="tag">New Update</span></a><a data-v="pp"><svg class="i"><use href="#page"/></svg>Payment Pages</a><a data-v="pp"><svg class="i"><use href="#at"/></svg>Razorpay.me Link</a><a data-v="pp"><svg class="i"><use href="#doc"/></svg>Invoices</a><a data-v="pp"><svg class="i"><use href="#qr"/></svg>QR Codes</a><a data-v="pp"><svg class="i"><use href="#repeat"/></svg>Subscriptions</a>
+   <div class="push"></div>
+   <a onclick="leaveTest()"><svg class="i"><use href="#flask"/></svg>Test Mode<span class="tg on" style="margin-left:auto"></span></a><a data-v="pp"><svg class="i"><use href="#gear"/></svg>Account &amp; Settings</a>
+  </aside><main class="main" id="main"></main></div>
+ <button class="help"><svg class="i"><use href="#head"/></svg>Help &amp; Support</button>
+</section>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const I=(n,c="")=>`<svg class="i ${c}"><use href="#${n}"/></svg>`;
+const firebaseConfig={apiKey:"AIzaSyCjPu3W9L0rSXXf3aVCzmx9fJ9n9HP9K3s",authDomain:"cyintel-cb4c9.firebaseapp.com",databaseURL:"https://cyintel-cb4c9-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"cyintel-cb4c9",storageBucket:"cyintel-cb4c9.firebasestorage.app",messagingSenderId:"1067686818980",appId:"1:1067686818980:web:fc491062474f1010b12231",measurementId:"G-W6E553YQGN"};
+let auth=null,user=null,mode="login",step=1;
+try{firebase.initializeApp(firebaseConfig);auth=firebase.auth()}catch(e){console.warn(e)}
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const uid=()=>user.uid||user.email,watches=()=>store.get("w_"+uid(),[]),payouts=()=>store.get("p_"+uid(),[]);
+const inr=n=>"₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+const nm=()=>user.displayName||user.email.split("@")[0];
+function toast(t,m){const d=document.createElement("div");d.className="to";d.innerHTML=`${I("bell")}<div><b>${t}</b>${m}</div>`;$("#toast").append(d);setTimeout(()=>d.remove(),5200)}
+const show=id=>["#auth","#onb","#app"].forEach(s=>$(s).classList.toggle("hide",s!="#"+id));
+function splash(then){$("#splash").classList.remove("hide");setTimeout(()=>{then();$("#splash").classList.add("hide")},1900)}
+const errMsg=e=>({"auth/email-already-in-use":"Account already exists. Please log in.","auth/invalid-credential":"Incorrect email or password.","auth/user-not-found":"No account found. Create one instead.","auth/weak-password":"Password needs at least 6 characters.","auth/invalid-email":"Enter a valid email.","auth/unauthorized-domain":"Domain not authorised: add it in Firebase Auth → Settings → Authorized domains.","auth/popup-closed-by-user":"Google sign-in was cancelled.","auth/operation-not-allowed":"Enable this sign-in method in the Firebase console."}[e.code]||e.message);
+/* login */
+function setMode(m){mode=m;$("#aSw").textContent=m=="login"?"New to Razorpay? Create an account":"Already have an account? Log in";$("#aGo").textContent=m=="login"?"Log in":"Create account"}
+$("#aSw").onclick=()=>{setMode(mode=="login"?"signup":"login");$("#aErr").textContent=""};
+$("#aGo").onclick=async()=>{const e=$("#aE").value.trim(),p=$("#aP").value,er=$("#aErr");er.textContent="";
+ if(/^\+?[\d\s-]{8,}$/.test(e))return er.textContent="Phone sign-in needs OTP setup. Please use your email or Google.";
+ if(!/^\S+@\S+\.\S+$/.test(e))return er.textContent="Enter a valid email or phone number.";
+ if(step==1){step=2;$("#aP").classList.remove("hide");$("#sw").classList.remove("hide");$("#aT").textContent="Enter your password";setMode("login");$("#aP").focus();return}
+ if(p.length<6)return er.textContent="Password must be at least 6 characters.";
+ if(!auth)return er.textContent="Firebase unreachable. Use the demo account below.";
+ const b=$("#aGo");b.innerHTML='<span class="sp2"></span>Please wait';
+ try{mode=="signup"?await auth.createUserWithEmailAndPassword(e,p):await auth.signInWithEmailAndPassword(e,p)}catch(x){er.textContent=errMsg(x)}setMode(mode)};
+$("#aG").onclick=async()=>{if(!auth)return $("#aErr").textContent="Firebase unreachable. Use the demo account below.";try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(x){$("#aErr").textContent=errMsg(x)}};
+$("#aD").onclick=()=>enter({email:"demo@razorpay.test",displayName:"Demo User",uid:"demo"});
+if(auth)auth.onAuthStateChanged(u=>{if(u)enter(u)});
+$("#lo").onclick=$("#oM").onclick=async()=>{try{auth&&await auth.signOut()}catch{}user=null;step=1;$("#aP").classList.add("hide");$("#aP").value="";$("#sw").classList.add("hide");$("#aT").textContent="Get started with your email or phone number";$("#aGo").textContent="Continue";$("#menu").classList.add("hide");show("auth")};
+/* onboarding + test mode */
+function enter(u){user=u;$("#oN").textContent=$("#oN2").textContent=nm();$("#mEm").textContent=u.email;$("#oTg").classList.remove("on");show("onb")}
+$("#oT").onclick=()=>{$("#oTg").classList.add("on");setTimeout(()=>splash(()=>{show("app");go("home");if("Notification"in window&&Notification.permission=="default")Notification.requestPermission()}),350)};
+function leaveTest(){splash(()=>{$("#oTg").classList.remove("on");show("onb")})}
+$("#um").onclick=()=>$("#menu").classList.toggle("hide");$("#bg").onclick=()=>$("#side").classList.toggle("open");
+/* router */
+function go(v){$$(".side [data-v]").forEach(a=>a.classList.toggle("on",a.dataset.v==v));$("#side").classList.remove("open");$("#main").innerHTML=views[v]();$("#main").scrollTop=0;if(v=="payouts")bindPay()}
+document.addEventListener("click",e=>{const a=e.target.closest("#app [data-v]");if(a)go(a.dataset.v);if(!e.target.closest("#um,#menu"))$("#menu").classList.add("hide")});
+const views={
+home:()=>`<div class="wrap"><h1 class="t">Hey ${nm()}, welcome to Razorpay.</h1>
+<p style="text-align:center;margin-top:12px;color:#374151">You picked Website &amp; Apps, so we'll set it up first. Explore other payment options anytime. <b style="cursor:pointer" data-v="pp">View all →</b></p>
+<div class="on-card"><div class="ico">${I("id")}</div><h3>Complete your onboarding to accept payments</h3><p>KYC verification is needed to collect live payments across channels. Meanwhile, you can explore our test experience.</p><button class="btn sm" onclick="leaveTest()">Complete Onboarding →</button></div>
+<div class="hero"><div><span class="pill">NEW · PayPal Payouts</span><h2>An automated AI-powered page viewer, notified when prices drop.</h2><p>No daily checks. Email and push alerts, commission, and fast PayPal transfers.</p><button class="btn sm" data-v="payouts">Try PayPal Payouts →</button></div><div class="big">${I("trend")}</div></div>
+<h2 style="font-size:1.25em;font-weight:600;margin:30px 0 16px">Ready-to-use products. No setup needed</h2>
+<div class="grid">${[["wallet","PayPal Payouts","AI price-drop alerts with commission and fast PayPal transfers.","payouts"],["link","Payment Links","Generate a link you can share with customers to get paid instantly.","pp"],["page","Payment Pages","Create a simple checkout page. No website or coding needed.","pp"],["qr","QR Codes","Make as many QR codes as you need. Share or print them.","pp"]].map(p=>`<div class="prod" data-v="${p[3]}"><div class="art">${I(p[0])}</div>${p[3]=="payouts"?'<span class="tag new">NEW</span>':""}<h4>${p[1]}</h4><p>${p[2]}</p><a>Use now ↗</a></div>`).join("")}</div></div>`,
+pp:()=>`<div class="wrap"><div class="empty"><div style="color:var(--blue)">${I("gear").replace('class="i ','style="width:44px;height:44px" class="i ')}</div><h3 style="margin:10px 0">Not part of this prototype</h3><p>Only Home, Transactions and PayPal Payouts are active.</p><button class="btn sm" style="margin-top:16px" data-v="payouts">Open PayPal Payouts</button></div></div>`,
+tx:()=>{const p=payouts();return `<div class="wrap" style="max-width:1100px;margin-top:10px"><h2 style="margin-bottom:16px">Transactions</h2><div class="tw"><table><tr><th>PAYOUT ID</th><th>RECEIVER</th><th>PRODUCT</th><th>AMOUNT</th><th>COMMISSION</th><th>STATUS</th></tr>${p.length?p.map(x=>`<tr><td>${x.id}</td><td>${x.to}</td><td>${x.name}</td><td>${inr(x.amount)}</td><td>${inr(x.fee)}</td><td><span class="st p">SUCCESS</span></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No transactions yet. Trigger a payout from PayPal Payouts.</td></tr>`}</table></div></div>`},
+payouts:()=>{const w=watches(),p=payouts(),sum=p.reduce((a,x)=>a+x.amount,0),fee=p.reduce((a,x)=>a+x.fee,0);
+return `<div class="wrap" style="max-width:1100px;margin-top:10px">
+<div class="hero"><div><span class="pill">PayPal Payouts · Sandbox</span><h2>An automated AI-powered page viewer, notified the moment prices drop.</h2><p>Add a product and a target price. The AI watches the page so you don't have to, alerts you by email and push, then transfers your reward.</p></div><div class="big">${I("wallet")}</div></div>
+<div class="flow"><b>${I("cart")}Product page</b>→<b>${I("eye")}AI viewer</b>→<b>${I("mail")}Email + push</b>→<b>${I("link")}Buy with PayPal</b>→<b>${I("pct")}Commission</b>→<b>${I("bolt")}Fast transfer</b></div>
+<div class="stats"><div class="stat"><span>Active watchers</span><b>${w.filter(x=>!x.done).length}</b></div><div class="stat"><span>Total payouts</span><b>${p.length}</b></div><div class="stat"><span>Paid out</span><b>${inr(sum)}</b></div><div class="stat"><span>Commission earned</span><b>${inr(fee)}</b></div></div>
+<div class="panel"><h3>New price watcher</h3><div class="row">
+<div><label>Product name</label><input class="in" id="pN" value="Galaxy S25 Ultra 12GB + 256GB"></div><div><label>Product page URL</label><input class="in" id="pU" placeholder="https://amazon.in/…"></div>
+<div><label>Current price (₹)</label><input class="in" id="pC" type="number" value="129999"></div><div><label>Target price (₹)</label><input class="in" id="pT" type="number" value="94999"></div>
+<div><label>Commission %</label><input class="in" id="pM" type="number" value="2" min="0" max="20"></div><div><label>PayPal receiver email</label><input class="in" id="pE" type="email" value="${user.email}"></div></div>
+<button class="btn sm" id="pA">Start watching</button></div>
+<h3 style="margin-bottom:12px">Watchlist</h3><div class="tw" style="margin-bottom:26px"><table><tr><th>PRODUCT</th><th>CURRENT</th><th>TARGET</th><th>STATUS</th><th></th></tr>
+${w.length?w.map((x,i)=>`<tr><td><b>${x.name}</b><div style="font-size:.78em;color:var(--mut)">${x.url||"no url"}</div></td><td>${inr(x.cur)}</td><td>${inr(x.target)}</td><td><span class="st ${x.done?"p":"w"}">${x.done?"PAID OUT":"WATCHING"}</span></td><td>${x.done?"":`<button class="btn sm" data-sim="${i}">Simulate price drop</button>`}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">No watchers yet. Add your first product above.</td></tr>`}</table></div>
+<h3 style="margin-bottom:12px">Recent payouts</h3><div class="tw"><table><tr><th>BATCH ID</th><th>RECEIVER</th><th>AMOUNT</th><th>COMMISSION</th><th>SPEED</th></tr>${p.length?p.slice().reverse().map(x=>`<tr><td>${x.id}</td><td>${x.to}</td><td>${inr(x.amount)}</td><td>${inr(x.fee)}</td><td>Fast transfer</td></tr>`).join(""):`<tr><td colspan="5" class="empty">Payouts appear here after a price drop.</td></tr>`}</table></div></div>`}};
+function bindPay(){
+ $("#pA").onclick=()=>{const x={name:$("#pN").value.trim(),url:$("#pU").value.trim(),cur:+$("#pC").value,target:+$("#pT").value,fee:+$("#pM").value,to:$("#pE").value.trim(),done:false};
+  if(!x.name||!(x.cur>0)||!(x.target>0)||x.target>=x.cur)return toast("Check inputs","Target price must be lower than current price.");
+  const w=watches();w.push(x);store.set("w_"+uid(),w);toast("AI watcher active","Alert at "+inr(x.target)+". No daily check needed.");go("payouts")};
+ $$("[data-sim]").forEach(b=>b.onclick=()=>drop(+b.dataset.sim,b))}
+function drop(i,b){const w=watches(),x=w[i];b.innerHTML='<span class="sp2"></span>AI scanning';
+ setTimeout(()=>{const price=x.target-Math.round(Math.random()*1000),save=x.cur-price,fee=+(save*x.fee/100).toFixed(2),amt=+(save*.1+fee).toFixed(2),id="PAYOUT-"+Math.random().toString(36).slice(2,9).toUpperCase();
+  toast("Price drop detected",`${x.name} fell to ${inr(price)} (save ${inr(save)}).`);
+  setTimeout(()=>{toast("Email sent","Alert delivered to "+x.to);if("Notification"in window&&Notification.permission=="granted")new Notification("Price dropped",{body:`${x.name} is now ${inr(price)}`})},900);
+  setTimeout(()=>{toast("Fast transfer complete",`${inr(amt)} sent to ${x.to} via PayPal Payouts (sandbox). Batch ${id}.`);x.done=true;w[i]=x;store.set("w_"+uid(),w);const p=payouts();p.push({id,to:x.to,name:x.name,amount:amt,fee});store.set("p_"+uid(),p);go("payouts")},1900)},1400)}
+</script></body></html>
