@@ -1,15 +1,20 @@
 {
-  "name": "hackathon-sponsor-backend",
+  "name": "paypal-flowbuilder-backend",
   "version": "1.0.0",
-  "description": "Backend using Channel3, PayPal Payouts, and Claude",
+  "description": "PayPal FlowBuilder AI Backend - Webhooks, Payouts, Groq AI, Telegram & Discord",
+  "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5",
     "axios": "^1.7.2",
-    "dotenv": "^16.4.5"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
