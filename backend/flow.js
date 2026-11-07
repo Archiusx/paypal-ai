@@ -28,8 +28,8 @@ async function pp(method, path, body, extra = {}, c = envConn) {
 const balHint = e => (e.status === 403 || e.status === 401 || /NOT_AUTHORIZED|permission/i.test(e.message + (e.name2 || "")))
   ? "PayPal says this app cannot read balances. Open your sandbox app on developer.paypal.com, tick Transaction Search under Features and save. For an app that already exists it can take up to 9 hours to apply."
   : e.message;
-async function getBalances(c, currency = "USD") {
-  const cur = String(currency || "USD").toUpperCase();
+async function getBalances(c, currency = "INR") {
+  const cur = String(currency || "INR").toUpperCase();
   const j = await pp("GET", "/v1/reporting/balances?currency_code=" + encodeURIComponent(cur), null, {}, c);
   return { account_id: j.account_id, as_of: j.as_of_time, balances: (j.balances || []).map(b => ({ currency: b.currency, available: b.available_balance?.value, total: b.total_balance?.value, withheld: b.withheld_balance?.value })) };
 }
@@ -115,7 +115,7 @@ async function fire(ctx, onlyWf) {
 // ---------- PayPal event -> context ----------
 async function ctxFromWebhook(ev) {
   const r = ev.resource || {}, t = ev.event_type;
-  const ctx = { event_type: t, id: ev.id, currency: r.amount?.currency_code || r.amount?.currency || "USD", amount: parseFloat(r.amount?.value ?? r.amount?.total ?? r.dispute_amount?.value ?? 0), country: "", buyer: {}, order: {}, capture: {} };
+  const ctx = { event_type: t, id: ev.id, currency: r.amount?.currency_code || r.amount?.currency || "INR", amount: parseFloat(r.amount?.value ?? r.amount?.total ?? r.dispute_amount?.value ?? 0), country: "", buyer: {}, order: {}, capture: {} };
   if (t === "PAYMENT.CAPTURE.COMPLETED") { ctx.capture.id = r.id; ctx.order.id = r.supplementary_data?.related_ids?.order_id; }
   else if (t === "PAYMENT.CAPTURE.REFUNDED") { ctx.capture.id = (r.links?.find(l => l.rel === "up")?.href || "").split("/").pop(); ctx.order.id = r.supplementary_data?.related_ids?.order_id; }
   else if (t === "CUSTOMER.DISPUTE.CREATED") { ctx.capture.id = r.disputed_transactions?.[0]?.seller_transaction_id; ctx.id = r.dispute_id; ctx.currency = r.dispute_amount?.currency_code || "USD"; }
