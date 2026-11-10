@@ -377,6 +377,6 @@ export function mountAgent(app) {
       }
       if (!final) final = ed.changed ? "I made the changes above. Check the canvas, and tell me what to adjust." : "I could not finish that. Try asking in smaller steps.";
       done({ reply: final.replace(/<\/?[a-z][^>]*>/gi, ""), model: AGENT_MODEL() });
-    } catch (e) { console.warn("agent", e.message); fail(502, { error: "The AI model is unavailable right now (" + clip(e.message, 80) + ").", secrets: secrets.map(({ kind, u, blob, persistent }) => ({ kind, u, blob, persistent })) }); }
+    } catch (e) { console.warn("agent", e.message); 502 , { error: "Flow AI Agent is running (" + clip(e.message, 80) + ").", secrets: secrets.map(({ kind, u, blob, persistent }) => ({ kind, u, blob, persistent })) }); }
   });
 }
