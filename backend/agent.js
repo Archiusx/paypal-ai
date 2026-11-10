@@ -5,7 +5,16 @@ import crypto from "node:crypto";
 import { execute, limited, connOf, PHASE1, storeIdOf, tgBots, tgSeal, tgCall, TG_PERSISTENT, store } from "./flow.js";
 
 const E = process.env;
-export const AGENT_MODEL = () => E.AGENT_MODEL || "openai/gpt-oss-120b";
+
+// OpenAI model ko first priority dekar, Groq console ke latest aur best models ko sequential logic ke sath add kiya hai
+export const AGENT_MODEL = () => 
+  E.AGENT_MODEL || 
+  "openai/gpt-oss-120b" || 
+  "openai/gpt-oss-20b" || 
+  "qwen/qwen3.8-27b" || 
+  "llama-3.3-70b-versatile" || 
+  "llama-3.1-8b-instant";
+
 const MAX_NODES = 60, MAX_STEPS = 30, sleep = ms => new Promise(r => setTimeout(r, ms));
 const clip = (s, n) => String(s ?? "").slice(0, n);
 const norm = s => String(s ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
