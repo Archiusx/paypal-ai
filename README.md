@@ -1,6 +1,6 @@
-<div align="center">
+<div align="left">
 
-# 💸 PayPal AI
+#  PayPal AI
 
 ### Describe your business. Let AI build the store, the automations and the cashback — all on PayPal.
 
