@@ -14,7 +14,6 @@ An AI-native commerce studio built on the **PayPal Developer Platform**: generat
 ![PayPal](https://img.shields.io/badge/PayPal-Orders%20v2%20%7C%20Payouts%20%7C%20Webhooks-003087?logo=paypal&logoColor=white)
 ![Groq](https://img.shields.io/badge/AI-Groq%20%C2%B7%20gpt--oss--120b-F55036)
 ![Channel3](https://img.shields.io/badge/Product%20Data-Channel3-black)
-![Zapier](https://img.shields.io/badge/Automation-Zapier-FF4F00?logo=zapier&logoColor=white)
 ![Cloudinary](https://img.shields.io/badge/Images-Cloudinary-3448C5?logo=cloudinary&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Database-Supabase-3FCF8E?logo=supabase&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Auth-Firebase-FFCA28?logo=firebase&logoColor=black)
@@ -58,8 +57,7 @@ An AI-native commerce studio built on the **PayPal Developer Platform**: generat
 |---|--------|--------------|
 | 1 | **Web Store Builder + Site Agent** | Chat with an AI agent to generate, edit and publish a real store with PayPal checkout. |
 | 2 | **Workflow Builder + Flow Assistant** | Drag-and-drop automations that fire on PayPal events, with an AI assistant that builds the flow for you. |
-| 3 | **Price Watch & Cashback Payouts** | Paste any product URL, let AI set a price-drop target, and pay out cashback via PayPal Payouts when it hits. |
-| 4 | **Store Manager** | A ledger and activity view of money in and out (B2B, B2C, C2B, G2C) fed by your automations. |
+| 3 | **Store Manager** | A ledger and activity view of money in and out (B2B, B2C, C2B, G2C) fed by your automations.
 
 It was built for the **[PayPal AI Hackathon 2026 — "Build What's Next with PayPal and AI"](https://paypalaihackathon.devpost.com/)**, where the one hard requirement is that a project **meaningfully uses both PayPal and AI**. Here, PayPal is not a bolt-on: it is the payment rail, the event source, the payout engine and the data the AI reasons over.
 
