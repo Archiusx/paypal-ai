@@ -10,7 +10,7 @@ async function call(path, opt = {}) {
   if (!KEY) throw new Error("database not configured");
   const r = await fetch(BASE + "/rest/v1/" + path, {
     ...opt, signal: AbortSignal.timeout(20000),
-    headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json", ...(opt.headers || {}) }
+    headers: { apikey: KEY, ...(KEY.startsWith("sb_") ? {} : { Authorization: "Bearer " + KEY }), "Content-Type": "application/json", ...(opt.headers || {}) }   // new sb_secret_ keys are not JWTs: apikey header only
   });
   if (!r.ok) throw new Error("db " + r.status + " " + (await r.text().catch(() => "")).slice(0, 160));
   return r;
@@ -25,4 +25,4 @@ export async function recordChatRun(row) {
   if (!KEY) return false;
   try { await dbInsert("ppai_ai_chat_runs", [row]); return true; }
   catch (e) { console.warn("chat run not saved:", e.message); return false; }
-}
+  }
