@@ -152,42 +152,7 @@ sequenceDiagram
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    subgraph Client["Frontend (Vercel) — vanilla JS, no build step"]
-        UI["index.html<br/>Dashboard · Builder · Manager"]
-        SA["ai-agent.js<br/>Site Agent UI"]
-    end
-
-    subgraph Server["Backend (Render) — Node.js + Express"]
-        SRV["server.js<br/>App bootstrap · Routing"]
-        FLOW["flow.js<br/>Workflow engine · Webhooks · Scheduler"]
-        AGT["agent.js<br/>Flow Assistant"]
-        STORE["store.js<br/>Store renderer · Checkout"]
-        SITE["siteagent/<br/>Tool-calling Site Agent"]
-        SYNC["sync.js<br/>Firebase ⇄ Supabase"]
-    end
-
-    subgraph Ext["External services"]
-        PP[("PayPal<br/>Orders · Refunds · Webhooks")]
-        GROQ[("Groq LLMs")]
-        CLD[("Cloudinary")]
-        SUPA[("Supabase")]
-        FB[("Firebase Auth")]
-        RS[("Resend")]
-        TG[("Telegram · Slack · Discord")]
-    end
-
-    UI --> SRV & FLOW & AGT & STORE & SITE
-    SA --> SITE
-    FLOW --> PP & RS & TG & SUPA
-    AGT --> GROQ
-    SITE --> GROQ & CLD & SUPA
-    STORE --> PP
-    SYNC --> FB & SUPA
-    UI --> FB
-    PP -- webhooks --> FLOW
-```
+![PayPal-AI Architecture Diagram](App_preview/Screenshot_2026-11-12-19-40-06-382_com.microsoft.office.officehubrow.png
 
 **Design principles**
 
