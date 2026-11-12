@@ -199,11 +199,11 @@ flowchart LR
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Vanilla JavaScript, HTML/CSS (single-file app, no build step), hosted on **Netlify** |
+| Frontend | Vanilla JavaScript, HTML/CSS (single-file app, no build step), hosted on **vercel** |
 | Backend | **Node.js ≥ 18**, **Express 4**, ES Modules |
 | Payments | **PayPal** Orders v2, Webhooks, Refunds, Disputes, Transaction Search (Sandbox) |
 | AI | **Groq** (`openai/gpt-oss-120b` default, with `gpt-oss-20b`, `qwen3` and `llama-3.3-70b` fallbacks) |
-| Hosting | **Render** (API), **Netlify** (UI) |
+| Hosting | **Render** (API), **vercel** (UI) |
 | Notifications | Slack, Discord, Telegram Bot API |
 | Email | **Resend** |
 | Images | **Cloudinary** |
@@ -385,11 +385,11 @@ Copy `backend/.env.example` to `backend/.env`. Never commit real secrets.
 5. Copy the Render URL into `PUBLIC_API_URL`, and register `https://<render-url>/webhooks/paypal` in your PayPal sandbox app.
 6. Verify with `GET /api/health`.
 
-### Frontend on Netlify
+### Frontend on vercel
 
-1. Create a new Netlify site from the same repo with **no build command** and the repo root as the publish directory.
+1. Create a new vercel site from the same repo with **no build command** and the repo root as the publish directory.
 2. Update the API base URL in `index.html` to your Render URL.
-3. Set `ALLOWED_ORIGIN` on Render to your Netlify domain.
+3. Set `ALLOWED_ORIGIN` on Render to your Vercel domain.
 
 ---
 
@@ -495,7 +495,7 @@ paypal-ai/
 ## Roadmap
 
 - [ ] PayPal **Subscriptions** and **Invoicing** nodes
-- [ ] Multi-currency stores beyond USD, EUR, GBP, CAD and AUD
+- [ ] AI powered plugins and document handling
 - [ ] Team workspaces and role-based access
 - [ ] More store templates and a visual theme editor
 - [ ] MCP server so external agents can drive the workflow engine
