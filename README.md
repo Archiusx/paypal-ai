@@ -105,7 +105,7 @@ PayPal AI puts an **agent in front of PayPal**. You describe what you want in pl
 
 ### 3. Store Manager
 
-A ledger and activity view of your business. Workflow runs write their payments here as money in or out, tagged **B2B / B2C / C2B / G2C**. Test runs never write to your books.
+A AI powered ledger and activity view of your business. Workflow runs write their payments here as money in or out, tagged **B2B / B2C / C2B / G2C**. Test runs never write to your books with chat feature for asking questions about your business sales and revenue etc.
 
 ### 4. Production Features
 
@@ -151,7 +151,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    subgraph Client["Frontend (Netlify) — vanilla JS, no build step"]
+    subgraph Client["Frontend (Vercel) — vanilla JS, no build step"]
         UI["index.html<br/>Dashboard · Builder · Manager"]
         SA["ai-agent.js<br/>Site Agent UI"]
     end
