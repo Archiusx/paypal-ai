@@ -150,9 +150,9 @@ sequenceDiagram
 
 ---
 
-## Architecture
+## Architecture Diagram
 
-![PayPal-AI Architecture Diagram](App_preview/Screenshot_2026-11-12-19-40-06-382_com.microsoft.office.officehubrow.png
+![PayPal-AI Architecture Diagram](App_preview/Screenshot_2026-11-12-19-40-06-382_com.microsoft.office.officehubrow.png)
 
 **Design principles**
 
