@@ -18,7 +18,7 @@ An AI-native commerce studio built on the **PayPal Developer Platform**: generat
 ![Firebase](https://img.shields.io/badge/Auth-Firebase-FFCA28?logo=firebase&logoColor=black)
 ![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
 
-[**Live Demo**](https://your-frontend-url.netlify.app) · [**Demo Video**](https://youtube.com/your-video-link) · [**Devpost Submission**](https://devpost.com/software/your-project) · [**Report a Bug**](../../issues)
+[**Live Demo**](https://paypal-ai-gilt.vercel.app/) · [**Demo Video**](https://youtu.be/4BLro144avc?si=NgpWxviou1LUIUTU). [**Report a Bug**](../../issues)
 
 </div>
 
