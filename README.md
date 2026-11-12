@@ -530,7 +530,29 @@ Distributed under the **GNU General Public License v3.0**. See [`LICENSE`](LICEN
 - **[Render](https://render.com/)** for sponsoring tools used in this project.
 - **[Groq](https://groq.com/)**, **[Cloudinary](https://cloudinary.com/)**, **[Supabase](https://supabase.com/)**, **[Firebase](https://firebase.google.com/)** and **[Resend](https://resend.com/)** for the services that power the stack.
 
+## 📚 Research References
+
+1. **AI-Powered Fraud Prevention in Digital Payment Ecosystems: Leveraging Machine Learning for Real-Time Anomaly Detection and Risk Mitigation**
+   - **Author:** Prince Kumar (Visvesvaraya Technological University)
+   - **Journal:** Journal of Information Systems Engineering and Management (JISEM), Vol. 9, Issue 4 (2024)
+   - **Publication Page:** https://researchgate.net
+   - **Journal Link:** https://jisem-journal.com
+
+2. **Conversational Commerce and Inclusive Digital Retailing in Tier-2 and Tier-3 Cities: Redefining the Indian Rural-Urban Retail Interface**
+   - **Author:** Dr. Dayanand Parappa Bellagi (Government First Grade College, Terdal)
+   - **Journal:** International Journal of Research and Analytical Reviews (IJRAR), Vol. 13, Issue 2 (June 2026)
+   - **DOI:** https://doi.org
+   - **Article Page:** http://ijrar.org
+
+3. **An AI-powered Smart Routing Solution for Payment Systems**
+   - **Authors:** Ramya Bygari, Aayush Gupta, Shashwat Raghuvanshi, Aakanksha Bapna, Birendra Sahu (Razorpay)
+   - **Repository:** arXiv (arXiv:2111.00783 [cs.AI])
+   - **DOI:** https://doi.org
+   - **Abstract Page:** https://arxiv.org
+
 <div align="center">
+
+
 
 **Built for the PayPal AI Hackathon 2026 · Sandbox only · No real money moves**
 
