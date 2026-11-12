@@ -4,6 +4,9 @@
 
 ### Describe your business. Let AI build the store and the automations, all on PayPal.
 
+![App Preview](App_preview/Screenshot_2026-11-12-12-27-36-190_com.android.chrome.png)
+
+
 An AI-native commerce studio built on the **PayPal Developer Platform**: generate a hosted PayPal-checkout web store from a chat, and wire up post-purchase automations with a visual workflow builder.
 
 [![PayPal AI Hackathon 2026](https://img.shields.io/badge/PayPal%20AI%20Hackathon-2026-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypalaihackathon.devpost.com/)
